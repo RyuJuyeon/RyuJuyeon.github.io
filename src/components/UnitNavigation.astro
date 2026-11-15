@@ -1,0 +1,11 @@
+---
+import { courses } from '../data/courses';
+import { courseLessonUrl } from '../data/curriculum';
+const { currentSlug, course = courses[0] } = Astro.props;
+---
+<nav class="unit-navigation" aria-label={`${course.name} 단원 탐색`}>
+{course.chapters.map((chapter: import('../data/curriculum').Chapter, index: number) => <details id={`unit-${chapter.id}`} open={!currentSlug || chapter.sections.some(section => section.lessons.some(lesson => lesson.slug === currentSlug))}>
+  <summary><span class="unit-number">0{index + 1}</span><strong>{chapter.title}</strong><span class="unit-count">{chapter.sections.reduce((count, section) => count + section.lessons.length, 0)}개 소단원</span></summary>
+  {chapter.sections.map((section, sectionIndex) => <div class="unit-group"><h3>{index + 1}.{sectionIndex + 1} {section.title}</h3><ul>{section.lessons.map(lesson => <li><a href={courseLessonUrl(course.slug, lesson.slug)} aria-current={currentSlug === lesson.slug ? 'page' : undefined}><span>{lesson.title}</span><span class="unit-link-label">{lesson.lab.status === 'ready' ? '실험 가능 ↗' : lesson.concept ? '개념 보기 →' : '학습실 · 콘텐츠 준비 중 →'}</span></a></li>)}</ul></div>)}
+</details>)}
+</nav>

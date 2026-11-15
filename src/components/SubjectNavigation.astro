@@ -1,0 +1,8 @@
+---
+import { subjects } from '../data/subjects';
+const activeSlug = Astro.url.pathname.split('/')[2];
+---
+<nav class="subject-navigation wrap" aria-label="과목 바로가기">
+  <a href="/subjects/" aria-current={Astro.url.pathname === '/subjects/' ? 'page' : undefined}>전체 과목</a>
+  {subjects.map(subject => <a href={subject.href} aria-current={activeSlug === subject.slug ? 'page' : undefined}>{subject.name}</a>)}
+</nav>

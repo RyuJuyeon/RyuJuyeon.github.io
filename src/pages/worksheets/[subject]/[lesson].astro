@@ -1,0 +1,6 @@
+﻿---
+import WorksheetPage from '../../../components/WorksheetPage.astro';
+import { allLessonEntries, worksheetConfig } from '../../../data/courses';
+export function getStaticPaths() { return allLessonEntries.map(({course,lesson}) => ({params:{subject:course.slug,lesson:lesson.slug},props:worksheetConfig(course,lesson)})); }
+---
+<WorksheetPage {...Astro.props}/>

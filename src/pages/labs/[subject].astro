@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { courses } from '../../data/courses';
+import { entriesFor, courseLessonUrl, worksheetUrl } from '../../data/curriculum';
+export function getStaticPaths() { return courses.map(course=>({params:{subject:course.slug},props:{course}})); }
+const { course } = Astro.props;
+---
+<Layout title={`${course.name} 탐구 실험실 | 고등 수학 탐구 아카이브`}><main id="main" class="wrap detail-page"><a class="text-link" href={`/subjects/${course.slug}/`}>← {course.name} 단원 탐색</a><div class="eyebrow">MATH EXPLORATION LAB</div><h1>{course.name} 탐구 실험실</h1><p>소단원의 학습과 실험, 기록을 이어가는 공간입니다. 미제작 실험은 준비 중으로 표시합니다.</p><div class="topic-chips">{courses.map(item=><a href={`/labs/${item.slug}/`} aria-current={item.slug===course.slug?'page':undefined}>{item.name}</a>)}</div>
+<div class="lab-catalog">{entriesFor(course).map(({chapter,section,lesson})=><article class="learning-area"><span class="category">{chapter.title} · {section.title}</span><h2>{lesson.title}</h2><span class:list={['badge',{available:lesson.lab.status==='ready'}]}>{lesson.lab.status==='ready'?'실험 가능':'실험 준비 중'}</span>{lesson.lab.status==='ready'?<p><a class="button primary" href={lesson.lab.href}>{lesson.lab.label} →</a></p>:<p>탐구 활동을 준비하고 있습니다.</p>}<div class="lesson-area-links"><a href={courseLessonUrl(course.slug,lesson.slug)}>소단원 학습</a><a href={worksheetUrl(course.slug,lesson.slug)}>{lesson.worksheetPdf?'학습지에 기록':'빈 필기장에 기록'}</a></div></article>)}</div></main></Layout>

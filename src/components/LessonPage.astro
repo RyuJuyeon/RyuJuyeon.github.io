@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import UnitNavigation from './UnitNavigation.astro';
+import { entriesFor, courseLessonUrl, worksheetUrl, curriculumNote, curriculumSource, type Course } from '../data/curriculum';
+interface Props { course: Course; lessonSlug: string }
+const { course, lessonSlug } = Astro.props;
+const entries = entriesFor(course);
+const index = entries.findIndex(entry => entry.lesson.slug === lessonSlug);
+const { chapter, section, lesson } = entries[index];
+const previous = entries[index - 1], next = entries[index + 1];
+const lessonHref = (slug: string) => courseLessonUrl(course.slug, slug);
+const resources = [{ id: 'answers', title: '정답·해설', resource: lesson.answers }, { id: 'lab', title: '탐구 실험실', resource: lesson.lab }, { id: 'assessment', title: '형성평가', resource: lesson.assessment }];
+---
+<Layout title={`${lesson.title} · ${course.name} | 고등 수학 탐구 아카이브`}><main id="main" class="wrap detail-page">
+<a class="text-link" href={`/subjects/${course.slug}/#units`}>← {course.name} 전체 단원</a>
+<div class="unit-workspace"><aside class="unit-sidebar"><h2>단원 탐색</h2><UnitNavigation course={course} currentSlug={lesson.slug}/></aside>
+<article class="unit-content"><div class="eyebrow">{course.name} · {chapter.title}</div><p class="unit-breadcrumb">{chapter.title} / {section.title} / 소단원</p><h1>{lesson.title}</h1>
+<div class="lesson-area-links" aria-label="학습 영역 바로가기"><a href="#concept">개념 학습</a><a href="#pdf">PDF·필기 학습지</a><a href="#answers">정답·해설</a><a href="#lab">탐구 실험실</a><a href="#assessment">형성평가</a></div>
+<section class="learning-area" id="concept"><div class="area-heading"><h2>개념 학습</h2><span class:list={['badge', {available: !!lesson.concept}]}>{lesson.concept ? '개념 요약' : '준비 중'}</span></div>{lesson.concept ? <><p>{lesson.concept.summary}</p><div class="concept-example"><h3>예시로 이해하기</h3><p>{lesson.concept.example}</p></div></> : <p>이 소단원의 개념 설명과 예시는 준비 중입니다.</p>}</section>
+<section class="learning-area" id="pdf"><div class="area-heading"><h2>PDF·필기 학습지</h2><span class:list={['badge', {available: !!lesson.worksheetPdf}]}>{lesson.worksheetPdf ? '샘플 제공' : '개념학습지 준비 중'}</span></div>
+{lesson.worksheetPdf ? <a class="text-link" href={lesson.worksheetPdf} download>원본 PDF 다운로드 ↓</a> : <p>개념학습지 PDF는 준비 중입니다. 빈 모눈 필기장에서 자유롭게 풀이와 탐구 내용을 기록할 수 있습니다.</p>}
+{lesson.pdf.status === 'ready' && <p><a class="text-link" href={lesson.pdf.href}>{lesson.pdf.label} →</a></p>}
+<a class="button primary" href={worksheetUrl(course.slug, lesson.slug)}>{lesson.worksheetPdf ? '온라인 필기 학습지 열기' : '빈 모눈 필기장 열기'} →</a><p class="subtle">펜·지우개 · 페이지별 자동 저장 · 필기 포함 PDF 다운로드</p></section>
+{resources.map(({id,title,resource}) => <section class="learning-area" id={id}><div class="area-heading"><h2>{title}</h2><span class:list={['badge',{available:resource.status==='ready'}]}>{resource.status==='ready'?'이용 가능':'준비 중'}</span></div>{resource.status==='ready'? <a class="button primary" href={resource.href}>{resource.label} →</a>:<p>{title} 콘텐츠는 준비 중입니다.</p>}{id==='lab' && <p><a class="text-link" href={`/labs/${course.slug}/`}>{course.name} 실험실 목록 →</a></p>}</section>)}
+<section class="standards-note"><h2>교육과정 안내</h2><p>{curriculumNote}</p><p><a href={`${curriculumSource.href}#page=${course.sourcePage + 8}`} target="_blank" rel="noopener noreferrer">과목 안내자료 {course.sourcePage}쪽 (새 창)</a></p>{lesson.achievementStandard ? <p>{lesson.achievementStandard.code} · {lesson.achievementStandard.text} <a href={lesson.achievementStandard.source}>출처 확인</a></p>:<p>미확인 성취기준: 코드·원문 미제공</p>}</section>
+<div class="lesson-pagination">{previous?<a href={lessonHref(previous.lesson.slug)}><small>← 이전 소단원</small>{previous.lesson.title}</a>:<span/>}{next?<a href={lessonHref(next.lesson.slug)}><small>다음 소단원 →</small>{next.lesson.title}</a>:<a href={`/subjects/${course.slug}/#units`}>전체 단원으로 →</a>}</div>
+</article></div></main></Layout>

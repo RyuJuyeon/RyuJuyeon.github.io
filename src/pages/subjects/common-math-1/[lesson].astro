@@ -1,0 +1,7 @@
+﻿---
+import LessonPage from '../../../components/LessonPage.astro';
+import { courses } from '../../../data/courses';
+import { entriesFor } from '../../../data/curriculum';
+export function getStaticPaths() { const course = courses[0]; return entriesFor(course).map(({lesson}) => ({params:{lesson:lesson.slug},props:{course,lessonSlug:lesson.slug}})); }
+---
+<LessonPage {...Astro.props}/>

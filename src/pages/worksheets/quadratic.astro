@@ -1,0 +1,8 @@
+﻿---
+import WorksheetPage from '../../components/WorksheetPage.astro';
+import { courses, worksheetConfig } from '../../data/courses';
+import { entriesFor } from '../../data/curriculum';
+const course = courses[0];
+const lesson = entriesFor(course).find(entry => entry.lesson.slug === 'quadratic-extrema')!.lesson;
+---
+<WorksheetPage {...worksheetConfig(course, lesson)}/>

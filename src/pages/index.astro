@@ -1,0 +1,21 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+import Graph from '../components/Graph.astro';
+import { subjects } from '../data/subjects';
+import SubjectCards from '../components/SubjectCards.astro';
+---
+<Layout>
+<main id="main">
+<section class="hero wrap" id="home">
+ <div class="hero-copy"><div class="eyebrow"><span class="dot"></span> 2022 개정 교육과정 기반</div><h1>수학을 이해하고,<br /><em>스스로 탐구하는 힘.</em></h1><p>개념을 차근차근 쌓는 학습자료부터<br />직접 움직이며 발견하는 수학 탐구까지.<br />나만의 수학 공부를 시작해 보세요.</p><div class="actions"><a class="button primary" href="/subjects/">학습자료 둘러보기 <span>↗</span></a><a class="button secondary" href="#lab">탐구 실험실 가기 <span>→</span></a></div><div class="hero-note"><span>개념에서 발견으로</span><i></i><span>고등학교 수학을 한곳에</span></div></div>
+ <div class="hero-art"><div class="art-top"><span>EXPLORATION NOTE — 01</span><span>● ● ●</span></div><div class="formula">작은 질문에서 시작되는 수학</div><svg viewBox="0 0 480 300" role="img" aria-label="꼭짓점이 원점인 이차함수의 포물선"><defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#b8cabb" stroke-width="0.65" /></pattern></defs><rect width="480" height="300" fill="url(#grid)"/><path d="M30 235H450M240 280V20" stroke="#789182" stroke-width="1.2"/><path d="m444 230 7 5-7 5M235 27l5-7 5 7" fill="none" stroke="#789182"/><path d="M105 32 Q240 438 375 32" fill="none" stroke="#24674e" stroke-width="3.5"/><circle cx="240" cy="235" r="5" fill="#24674e"/><text x="253" y="255" fill="#60756a" font-size="14">O</text><text x="455" y="252" fill="#60756a">x</text><text x="255" y="25" fill="#60756a">y</text><text x="300" y="95" fill="#24674e" font-size="26" font-family="Georgia, serif" font-style="italic">y = ax²</text></svg><div class="art-caption"><span class="little-label">생각해 보기</span> a가 바뀌면, 그래프는 어떻게 달라질까? <span>↗</span></div><div class="floating-note">공식 너머의<br /><strong>수학을 만나다.</strong><span>✳</span></div></div>
+</section>
+<div class="intro-strip wrap"><span><b>01</b> 개념을 읽고</span><span class="strip-line"></span><span><b>02</b> 문제로 연결하고</span><span class="strip-line"></span><span><b>03</b> 직접 탐구하기</span><p>이해가 깊어지는 나만의 학습 흐름</p></div>
+<section class="section wrap" id="resources"><div class="section-heading"><div><div class="eyebrow">SUBJECT ARCHIVE</div><h2>어떤 수학을 탐구해 볼까요?</h2><p>과목별 개념 학습과 탐구 활동을 한눈에 살펴보세요.</p></div><span class="subtle">{subjects.length}개 과목 · 단원별 학습과 필기를 한곳에</span></div><SubjectCards /></section>
+<section class="lab-section" id="lab"><div class="wrap lab-layout"><div class="lab-copy"><div class="eyebrow">MATH EXPLORATION LAB</div><h2>눈으로 보고, 직접 바꾸고.<br />수학이 발견되는 실험실</h2><p>식 속의 숫자를 바꾸면 어떤 일이 일어날까요?<br />작은 변화에서 수학의 규칙을 찾아보세요.</p><div class="lab-topic"><span class="badge available">체험 가능</span><span>공통수학Ⅰ · 이차함수</span></div><h3>이차함수, 그래프로 만나다</h3><p class="lab-description">계수 a를 조절하며 포물선의 방향과 폭을 관찰해 보세요. |a|가 커질수록 그래프의 폭은 어떻게 변할까요?</p><a class="text-link" href="/subjects/common-math-1/#lesson">개념과 탐구 질문 살펴보기 <span>→</span></a></div><Graph /></div></section>
+<section class="section wrap curriculum" id="curriculum"><div><div class="eyebrow">LEARNING ROADMAP</div><h2>교육과정을 따라,<br />나의 속도로.</h2><p>2022 개정 교육과정을 기반으로<br />공통과목에서 선택과목으로 배움을 이어갑니다.</p><span class="subtle">요청하신 7개 과목을 제공하며, 모든 고교 수학 선택과목을 포함하는 목록은 아닙니다.</span></div><div class="roadmap"><div class="roadmap-row"><span class="step">01</span><div><span class="category">배움의 기초</span><h3>공통과목</h3><p>공통수학Ⅰ <span>·</span> 공통수학Ⅱ</p></div><span class="roadmap-mark">↗</span></div><div class="roadmap-row"><span class="step">02</span><div><span class="category">관심에 따라 넓히는 수학</span><h3>선택과목</h3><p>대수 · 미적분Ⅰ · 확률과 통계 · 기하 · 미적분Ⅱ</p></div><span class="roadmap-mark">↗</span></div><p class="roadmap-note">과목별 상세 교육과정 및 성취기준 안내는 준비 중입니다.</p><a class="text-link" href="https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202404250409254370.pdf" target="_blank" rel="noopener noreferrer">경기도교육청 과목 선택 안내자료 (PDF, 새 창) ↗</a></div></section>
+<aside class="notice wrap"><span class="notice-icon">i</span><p><strong>함께 채워갈 수학 아카이브</strong> 현재 공통수학Ⅰ 이차함수 예시를 만나볼 수 있어요. 이차함수 샘플 PDF는 필기할 수 있으며, 나머지 학습자료와 탐구 활동은 준비 중입니다.</p><span class="badge">준비 중</span></aside>
+</main>
+</Layout>
+
+

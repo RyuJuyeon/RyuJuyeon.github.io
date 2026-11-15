@@ -1,0 +1,6 @@
+---
+import LessonPage from '../../../components/LessonPage.astro';
+import { allLessonEntries } from '../../../data/courses';
+export function getStaticPaths() { return allLessonEntries.filter(entry => entry.course.slug !== 'common-math-1').map(entry => ({params:{subject:entry.course.slug,lesson:entry.lesson.slug},props:{course:entry.course,lessonSlug:entry.lesson.slug}})); }
+---
+<LessonPage {...Astro.props}/>

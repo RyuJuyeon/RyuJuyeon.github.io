@@ -1,0 +1,19 @@
+﻿---
+import Layout from '../../layouts/Layout.astro';
+import Graph from '../../components/Graph.astro';
+import UnitNavigation from '../../components/UnitNavigation.astro';
+import { entriesFor, curriculumNote, curriculumSource } from '../../data/curriculum';
+import { subjects } from '../../data/subjects';
+export function getStaticPaths() { return subjects.map(subject => ({ params: { slug: subject.slug }, props: { subject } })); }
+const { subject } = Astro.props;
+const lessonEntries = entriesFor(subject);
+const hasExample = subject.slug === 'common-math-1';
+---
+<Layout title={`${subject.name} | 고등 수학 탐구 아카이브`}><main id="main" class="wrap detail-page"><a href="/#resources" class="text-link">← 전체 과목으로</a><div class="eyebrow">{subject.category} · SUBJECT ARCHIVE</div><h1>{subject.name}</h1><p class="detail-lead">{subject.summary}</p><div class="lesson-area-links"><a href="#units">전체 단원 {lessonEntries.length}개</a><a href={`/subjects/${subject.slug}/${lessonEntries[0].lesson.slug}/`}>첫 소단원 학습실 →</a><a href={`/labs/${subject.slug}/`}>과목별 탐구 실험실 →</a></div><div class="topic-chips">{subject.topics.map(topic => <span>{topic}</span>)}</div>
+{<section class="unit-overview" id="units"><div class="eyebrow">CURRICULUM EXPLORER</div><h2>{subject.name} 단원 탐색</h2><p>{curriculumNote}</p><p class="unit-overview-stats">{subject.chapters.length}개 대단원 · {subject.chapters.reduce((count, chapter) => count + chapter.sections.length, 0)}개 중단원 · {lessonEntries.length}개 소단원</p><div class="lesson-area-links">{subject.chapters.map((chapter, index) => <a href={`#unit-${chapter.id}`}>{index + 1}. {chapter.title}</a>)}</div><UnitNavigation course={subject} /><p class="subtle">성취기준 코드·원문은 확인 후 제공할 예정입니다.</p><a class="text-link" href={curriculumSource.href} target="_blank" rel="noopener noreferrer">{curriculumSource.title} (PDF, 새 창) ↗</a></section>}{hasExample ? <><section class="lesson" id="lesson"><div class="eyebrow">방정식과 부등식 · 학습 예시</div><h2>이차함수의 그래프와 최대·최소</h2><p>이차함수 y = a(x − p)² + q (a ≠ 0)의 꼭짓점은 (p, q)이고, 대칭축은 직선 x = p입니다.</p><div class="lesson-facts"><article><span>01 / 개념 이해</span><h3>계수 a와 그래프의 모양</h3><p>a &gt; 0이면 위로, a &lt; 0이면 아래로 열린 포물선입니다. |a|가 커질수록 그래프의 폭은 좁아집니다.</p></article><article><span>02 / 예제 살펴보기</span><h3>y = 2(x − 1)² − 3</h3><p>꼭짓점은 (1, −3), 대칭축은 x = 1입니다. 0 ≤ x ≤ 3에서 x = 1일 때 최솟값 −3을 갖습니다. 양 끝점의 함수값은 −1과 5이므로, x = 3에서 최댓값은 5입니다.</p></article></div></section><section class="detail-lab" id="quadratic-lab"><div><div class="eyebrow">직접 탐구하기</div><h2>계수 하나가 만드는 변화</h2><ol><li>a = 1과 a = 2의 그래프 폭을 비교해 보세요.</li><li>a = 1과 a = −1은 어떤 대칭 관계일까요?</li><li>a = 0일 때 이차함수가 아닌 이유를 설명해 보세요.</li></ol><p class="subtle">이 실험은 꼭짓점이 원점인 y = ax²를 다룹니다.</p></div><Graph /></section></> : null}
+<section class="download-section"><div><div class="eyebrow">PDF LEARNING MATERIALS</div><h2>{hasExample ? '이차함수 PDF 학습자료' : `${subject.name} PDF 학습자료`}</h2><p>{hasExample ? "이차함수 탐구 샘플 PDF 2쪽에 직접 필기하고 저장할 수 있습니다." : "개념 정리, 연습문제, 탐구 활동지 파일은 아직 제공되지 않습니다."}</p></div>{hasExample ? <a class="button primary" href="/worksheets/quadratic/">태블릿 필기 학습지 열기 →</a> : <button class="button secondary" disabled>PDF 준비 중</button>}</section></main></Layout>
+
+
+
+
+

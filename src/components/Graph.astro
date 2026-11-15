@@ -1,0 +1,19 @@
+<div class="graph-widget"><div class="graph-heading"><span><span class="dot"></span> 이차함수 그래프 탐구</span><span class="subtle">INTERACTIVE</span></div><div class="graph-equation">y = <output id="coefficient">1</output>x²</div><svg id="live-graph" viewBox="0 0 440 260" role="img" aria-label="y = x² 그래프"><defs><pattern id="lab-grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" fill="none" stroke="#dfe6df" stroke-width="1" /></pattern><clipPath id="graph-clip"><rect width="440" height="260"/></clipPath></defs><rect width="440" height="260" fill="url(#lab-grid)"/><path d="M12 156H428M220 10V250" stroke="#9bada1"/><text x="426" y="174" font-size="12" fill="#6b7e70">x</text><text x="230" y="16" font-size="12" fill="#6b7e70">y</text><text x="207" y="173" font-size="11" fill="#6b7e70">0</text><g clip-path="url(#graph-clip)"><path id="parabola" d="M142 0 Q220 312 298 0" fill="none" stroke="#287454" stroke-width="3"/></g><circle cx="220" cy="156" r="4" fill="#287454"/></svg><div class="graph-controls"><label for="a-slider">계수 a <strong id="a-value">1.0</strong></label><input type="range" id="a-slider" min="-3" max="3" step="0.1" value="1"/><div class="range-labels"><span>−3</span><span>0</span><span>3</span></div><div class="graph-bottom"><p id="graph-status" aria-live="polite">위로 열린 포물선 · 최솟값 0</p><button type="button" id="reset-graph">초기화 ↺</button></div></div></div>
+<a class="text-link" href="/worksheets/quadratic/">탐구 결과를 PDF 학습지에 필기하기 →</a>
+<script>
+const slider = document.querySelector<HTMLInputElement>('#a-slider');
+function updateGraph() {
+ if (!slider) return;
+ const a = Number(slider.value);
+ let path = '';
+ for (let px = 0; px <= 440; px += 2) { const x = (px - 220) / 26; path += `${px === 0 ? 'M' : 'L'}${px},${156 - a * x * x * 26} `; }
+ document.querySelector('#parabola')!.setAttribute('d', path);
+ document.querySelector('#coefficient')!.textContent = String(a);
+ document.querySelector('#a-value')!.textContent = a.toFixed(1);
+ document.querySelector('#graph-status')!.textContent = a === 0 ? 'a = 0이면 이차함수가 아닌 상수함수입니다.' : a > 0 ? '위로 열린 포물선 · 최솟값 0' : '아래로 열린 포물선 · 최댓값 0';
+ document.querySelector('#live-graph')!.setAttribute('aria-label', `y = ${a}x² 그래프`);
+}
+slider?.addEventListener('input', updateGraph);
+document.querySelector('#reset-graph')?.addEventListener('click', () => { if (slider) slider.value = '1'; updateGraph(); });
+updateGraph();
+</script>
