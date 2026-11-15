@@ -1,0 +1,37 @@
+---
+import type { Activity } from '../data/activities/types';
+import '../styles/activities.css';
+interface Props { activity: Activity }
+const { activity } = Astro.props;
+const fields = {
+  circle: [{id:'a',label:'중심 x',min:-2,max:2,step:.1,value:0},{id:'b',label:'중심 y',min:-2,max:2,step:.1,value:0},{id:'r',label:'반지름 r',min:.5,max:3,step:.1,value:2}],
+  exponential: [{id:'base',label:'밑 a',min:.25,max:3,step:.25,value:2},{id:'x',label:'관찰점 x',min:-3,max:3,step:.1,value:1}],
+  derivative: [{id:'a',label:'기준점 a',min:-2,max:2,step:.1,value:1}],
+  probability: [],
+  parabola: [{id:'t',label:'점 P의 y좌표 t',min:-4,max:4,step:.05,value:2}],
+  hyperbola: [{id:'a',label:'주축의 반길이 a',min:1,max:3,step:.1,value:3},{id:'b',label:'b',min:1,max:3,step:.1,value:2},{id:'t',label:'점의 위치 t',min:-1.2,max:1.2,step:.02,value:.5}],
+  ellipse: [{id:'a',label:'장반경 a',min:3.5,max:5,step:.1,value:5},{id:'b',label:'단반경 b',min:1,max:3,step:.1,value:3},{id:'theta',label:'점 P의 각도 θ (라디안)',min:0,max:6.28,step:.01,value:1}],
+  trig: [{id:'a',label:'접점 a (라디안)',min:-3.14,max:3.14,step:.01,value:0}],
+}[activity.kind];
+---
+<div class="interactive-activity" data-activity={JSON.stringify(activity)}>
+<section class="learning-area" id="lab"><div class="area-heading"><h2>탐구 실험실</h2><span class="badge available">직접 조작</span></div><p>{activity.guide}</p>
+<div class="activity-controls">{fields.map(field => <label for={`lab-${field.id}`}><span>{field.label} <output data-value={field.id}>{field.value}</output></span><input id={`lab-${field.id}`} data-param={field.id} type="range" min={field.min} max={field.max} step={field.step} value={field.value}/></label>)}
+{activity.kind==='derivative' && <label for="lab-h">두 점의 간격 h<select id="lab-h" data-param="h">{[-1,-.5,-.1,-.01,.01,.1,.5,1].map(h=><option value={h} selected={h===.5}>{h}</option>)}</select></label>}
+{activity.kind==='parabola' && <label for="lab-p">초점의 x좌표 p<select id="lab-p" data-param="p">{[-2,-1,-.5,.5,1,2].map(p=><option value={p} selected={p===1}>{p}</option>)}</select></label>}
+{activity.kind==='hyperbola' && <label for="lab-branch">관찰할 가지<select id="lab-branch" data-param="branch"><option value="1">오른쪽 가지</option><option value="-1">왼쪽 가지</option></select></label>}
+{activity.kind==='trig' && <label for="lab-function">함수 선택<select id="lab-function" data-param="function"><option value="sin">sin x</option><option value="cos">cos x</option></select></label>}
+{activity.kind==='probability' && <><label for="lab-event">관찰할 사건<select id="lab-event" data-param="event"><option value="even">짝수가 나옴</option><option value="large">5 이상이 나옴</option><option value="six">6이 나옴</option></select></label><div class="experiment-actions">{[1,10,100].map(n=><button type="button" data-roll={n}>{n}회 시행</button>)}</div></>}
+<button type="button" class="lab-reset">실험 초기화</button></div>
+<svg class="activity-plot" viewBox="0 0 600 400" role="img" aria-label={`${activity.title} 탐구 그래프`}></svg>
+<p class="plot-legend">{activity.kind==='probability'?'초록 막대: 선택한 사건의 눈 · 회색 막대: 나머지 눈':activity.kind==='derivative'?'초록: 함수와 할선 · 주황: 접선':activity.kind==='trig'?'초록 실선: 원함수 · 보라 점선: 도함수 · 주황: 접선':'좌표와 관찰값을 아래에서 확인하세요.'}</p>
+<output class="lab-readout" aria-live="polite"></output>
+{activity.kind==='probability' && <table class="dice-table"><caption>눈별 발생 횟수</caption><thead><tr>{[1,2,3,4,5,6].map(n=><th scope="col">{n}</th>)}</tr></thead><tbody><tr>{[1,2,3,4,5,6].map(n=><td data-face={n}>0</td>)}</tr></tbody></table>}
+</section>
+<section class="learning-area" id="assessment"><div class="area-heading"><h2>확인 문제</h2><span class="badge available">자동 채점 · {activity.questions.length}문제</span></div><p class="answer-help">숫자 또는 분수(예: −1, 0.5, 1/2)를 입력하세요. 소수는 셋째 자리까지 반올림해도 정답으로 인정합니다.</p>
+<form class="activity-quiz" novalidate>{activity.questions.map((question,index)=><div class="question"><label for={`answer-${question.id}`}><strong>{index+1}.</strong> {question.prompt}</label><input type="text" id={`answer-${question.id}`} name={question.id} autocomplete="off" spellcheck="false" maxlength="80" aria-describedby={`feedback-${question.id}`} placeholder="답 입력"/><p id={`feedback-${question.id}`} class="answer-feedback" aria-live="polite"></p></div>)}<button type="submit" class="button primary">전체 답안 채점</button><output class="quiz-score" aria-live="polite"></output></form></section>
+<section class="learning-area" id="answers"><h2>정답·해설</h2>{activity.questions.map((q,index)=><details class="solution"><summary>{index+1}번 정답·해설 보기</summary><p>{q.explanation}</p></details>)}</section>
+<section class="learning-area" id="student-response"><h2>나의 탐구 기록</h2><label for="student-reflection">{activity.reflection}</label><textarea id="student-reflection" class="student-reflection" rows="7" maxlength="10000" placeholder="관찰한 수치, 풀이 과정, 발견한 규칙을 자유롭게 작성하세요."></textarea><p class="response-save" role="status">답안과 탐구 기록은 이 기기의 브라우저에 저장됩니다.</p><button class="response-download button secondary" type="button">답안·탐구 기록 텍스트 다운로드</button></section>
+<noscript>실험과 자동 채점에는 JavaScript가 필요합니다. 개념과 정답·해설은 아래 내용을 읽어 확인할 수 있습니다.</noscript>
+</div>
+<script>import '../lib/activities/controller';</script>

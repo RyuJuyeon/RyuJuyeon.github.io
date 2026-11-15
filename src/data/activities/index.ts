@@ -1,0 +1,11 @@
+import { circle } from './circle';
+import { exponential } from './exponential';
+import { derivative } from './derivative';
+import { probabilityActivity } from './probability';
+import { ellipse } from './ellipse';
+import { trig } from './trig';
+import { parabola } from './parabola';
+import { hyperbola } from './hyperbola';
+import { conicTangents } from './conic-tangents';
+export const activities = [circle, exponential, derivative, probabilityActivity, ellipse, trig, parabola, hyperbola, conicTangents];
+export const activityFor = (course: string, lesson: string) => activities.find(activity => activity.course === course && activity.lesson === lesson);

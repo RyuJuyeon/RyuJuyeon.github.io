@@ -6,10 +6,27 @@ import { probability } from './probability';
 import { geometry } from './geometry';
 import { calculus2 } from './calculus-2';
 import { entriesFor, type Course } from './curriculum';
+import { activities } from './activities';
+import { geometryMaterials } from './geometry-materials';
 export const courses: Course[] = [
   { slug: 'common-math-1', name: '공통수학Ⅰ', category: '공통과목', symbol: 'x²', summary: '다항식부터 방정식, 경우의 수와 행렬까지', chapters: commonMath1, sourcePage: 32 },
   commonMath2, algebra, calculus1, probability, geometry, calculus2,
 ];
+// Populate published units before deriving catalogs and routes, so all entry points agree.
+for (const activity of activities) {
+  const course = courses.find(course => course.slug === activity.course)!;
+  const lesson = entriesFor(course).find(entry => entry.lesson.slug === activity.lesson)!.lesson;
+  const base = `/subjects/${activity.course}/${activity.lesson}/`;
+  lesson.concept = { summary: activity.summary, example: activity.example };
+  lesson.lab = { status: 'ready', href: `${base}#lab`, label: `${activity.title} 탐구 실험` };
+  lesson.assessment = { status: 'ready', href: `${base}#assessment`, label: '확인 문제 자동 채점' };
+  lesson.answers = { status: 'ready', href: `${base}#answers`, label: '정답·해설 보기' };
+  const material = activity.course === 'geometry' ? geometryMaterials[activity.lesson] : undefined;
+  if (material) {
+    lesson.worksheetPdf = material.pdf;
+    lesson.pdf = {status:'ready',href:material.pdf,label:'문제 전용 학습지 · 6문제 / 3쪽'};
+  }
+}
 export const allLessonEntries = courses.flatMap(course => entriesFor(course).map((entry, index) => ({ course, ...entry, index })));
 export function worksheetConfig(course: Course, lesson: import('./curriculum').Lesson) {
   const legacy = course.slug === 'common-math-1' && lesson.slug === 'quadratic-extrema';

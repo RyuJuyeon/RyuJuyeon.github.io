@@ -236,7 +236,7 @@ async function start() {
       const { createBlankWorksheet } = await import('./blank');
       source = await createBlankWorksheet();
     }
-    doc = await getDocument({ data: source.slice() }).promise;
+    doc = await getDocument({ data: source.slice(), cMapUrl: '/pdfjs/cmaps/', cMapPacked: true, standardFontDataUrl: '/pdfjs/standard_fonts/' }).promise;
     docKey = sourceUrl ? `${app.dataset.storageKey}:${doc.fingerprints[0]}` : app.dataset.storageKey!;
     // Restore before permitting any gesture, so old notes cannot be overwritten.
     histories.set(1, { strokes: db ? await readPage(db, `${docKey}:1`) : [], undo: [], redo: [] });

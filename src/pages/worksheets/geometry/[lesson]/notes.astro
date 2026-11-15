@@ -1,0 +1,9 @@
+---
+import WorksheetPage from '../../../../components/WorksheetPage.astro';
+import { allLessonEntries, worksheetConfig } from '../../../../data/courses';
+import { geometryMaterials } from '../../../../data/geometry-materials';
+export function getStaticPaths() {
+  return allLessonEntries.filter(({course,lesson})=>course.slug==='geometry' && geometryMaterials[lesson.slug]).map(({course,lesson})=>({params:{lesson:lesson.slug},props:worksheetConfig(course,{...lesson,worksheetPdf:null})}));
+}
+---
+<WorksheetPage {...Astro.props} notesOnly/>

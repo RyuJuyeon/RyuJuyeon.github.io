@@ -1,11 +1,12 @@
 ---
 import { subjects } from '../data/subjects';
+import { activities } from '../data/activities';
 ---
 <div class="subjects" data-subject-catalog>
   {subjects.map(subject => <a class:list={['subject-card', { featured: subject.hasConcepts }]} href={subject.href} data-subject={subject.slug}>
     <div class="card-top"><span class="subject-symbol">{subject.symbol}</span><span class="badge available">단원 탐색 가능</span></div>
     <span class="category">{subject.category}</span><h3>{subject.name}</h3><p>{subject.summary}</p>
     <p class="subject-coverage">{subject.chapters.length}개 대단원 · {subject.lessonCount}개 소단원</p>
-    <div class="card-bottom"><span>{subject.hasConcepts ? '개념 요약 · 이차함수 실험 제공' : '빈 필기장 제공 · 학습자료 준비 중'}</span><span class="card-arrow">↗</span></div>
+    <div class="card-bottom"><span>{subject.slug === 'common-math-1' ? '개념 요약 · 이차함수 실험 제공' : activities.find(activity => activity.course === subject.slug)?.title + ' · 문제·실험 제공'}</span><span class="card-arrow">↗</span></div>
   </a>)}
 </div>

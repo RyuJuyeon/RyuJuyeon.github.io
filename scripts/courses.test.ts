@@ -5,6 +5,7 @@ import path from 'node:path';
 import { PDFDocument } from 'pdf-lib';
 import { courses, allLessonEntries, worksheetConfig } from '../src/data/courses';
 import { subjects } from '../src/data/subjects';
+import { activityFor } from '../src/data/activities';
 import { courseLessonUrl, worksheetUrl } from '../src/data/curriculum';
 import { createBlankWorksheet } from '../src/lib/worksheet/blank';
 import 'fake-indexeddb/auto';
@@ -41,7 +42,7 @@ test('seven distinct courses have complete hierarchies and no invented new conte
     assert.equal(new Set(entries.map(entry => entry.lesson.slug)).size, entries.length);
     for (const { lesson } of entries) {
       assert.equal(lesson.achievementStandard, null);
-      if (course.slug !== 'common-math-1') {
+      if (course.slug !== 'common-math-1' && !activityFor(course.slug, lesson.slug)) {
         assert.equal(lesson.concept, null);
         for (const resource of [lesson.pdf, lesson.answers, lesson.lab, lesson.assessment]) assert.equal(resource.status, 'pending');
       }

@@ -1,14 +1,14 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
 import '../styles/worksheet.css';
-interface Props { sourceUrl: string; storageKey: string; title: string; backUrl: string; labUrl: string }
-const { sourceUrl, storageKey, title, backUrl, labUrl } = Astro.props;
+interface Props { sourceUrl: string; storageKey: string; title: string; backUrl: string; labUrl: string; notesOnly?: boolean }
+const { sourceUrl, storageKey, title, backUrl, labUrl, notesOnly = false } = Astro.props;
 ---
 <Layout title={`${title} 필기장 | 고등 수학 탐구 아카이브`}>
 <main id="main" class="worksheet wrap">
   <a class="text-link" href={backUrl}>← 소단원 학습으로</a>
   <div class="worksheet-heading"><div><div class="eyebrow">WRITE · EXPLORE · UNDERSTAND</div><h1>생각을 쓰는 수학 학습지</h1><p>{title} · {sourceUrl ? "PDF 학습지" : "빈 모눈 필기장 (2쪽)"}</p></div><a class="button secondary" href={labUrl} target="_blank" rel="noopener">과목 탐구 실험실 ↗</a></div>
-  {!sourceUrl && <p class="standards-note">이 소단원의 개념학습지는 준비 중입니다. 여기는 문제나 해설이 없는 자유 필기장입니다.</p>}<div id="worksheet-app" aria-busy="true" data-source-url={sourceUrl} data-storage-key={storageKey} data-title={title}>
+  {!sourceUrl && <p class="standards-note">{notesOnly ? '기존 빈 모눈 필기장입니다. 이전에 작성한 기록을 그대로 불러옵니다. 문제 학습지는 소단원 학습 화면에서 열 수 있습니다.' : '이 소단원의 개념학습지는 준비 중입니다. 여기는 문제나 해설이 없는 자유 필기장입니다.'}</p>}<div id="worksheet-app" aria-busy="true" data-source-url={sourceUrl} data-storage-key={storageKey} data-title={title}>
     <div class="worksheet-toolbar" aria-label="필기 도구">
       <div class="tool-group"><button data-tool="pen" aria-pressed="true" disabled>✎ 펜</button><button data-tool="eraser" aria-pressed="false" disabled>획 지우개</button><button data-tool="move" aria-pressed="false" disabled>이동</button></div>
       <label>색상 <input id="ink-color" type="color" value="#245b43" aria-label="펜 색상" disabled /></label><label>굵기 <select id="ink-width" disabled><option value="1">가는 1pt</option><option value="2" selected>보통 2pt</option><option value="4">굵은 4pt</option><option value="7">매우 굵은 7pt</option></select></label>

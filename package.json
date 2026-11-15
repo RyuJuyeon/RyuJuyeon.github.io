@@ -12,9 +12,12 @@
     "astro": "astro",
     "test:worksheet": "node --import tsx --test scripts/worksheet.test.ts",
     "test:courses": "node --import tsx --test scripts/courses.test.ts",
-    "test": "node --import tsx --test scripts/worksheet.test.ts scripts/courses.test.ts",
+    "test": "node --import tsx --test scripts/worksheet.test.ts scripts/courses.test.ts scripts/activities.test.ts scripts/geometry.test.ts",
+    "test:activities": "node --import tsx --test scripts/activities.test.ts",
     "typecheck": "tsc --noEmit",
-    "generate:worksheet": "node scripts/create-sample-worksheet.mjs"
+    "generate:worksheet": "node scripts/create-sample-worksheet.mjs",
+    "prebuild": "node scripts/prepare-pdf-assets.mjs",
+    "predev": "node scripts/prepare-pdf-assets.mjs"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "cfb": "^1.2.2",
     "fake-indexeddb": "^6.2.8",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"

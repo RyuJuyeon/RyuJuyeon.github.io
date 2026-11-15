@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 # Generated worksheet test renders
 tmp/pdfs/
+tmp/geometry/
+public/pdfjs/
